@@ -1,0 +1,15 @@
+[Unit]
+Description=Proxy2icmp Client
+
+[Service]
+Type=simple
+Restart=on-failure
+RestartSec=30s
+KillMode=process
+ExecStart=/usr/share/p2iClient/proxy2icmp -type client -encryption -l listenIp:port -s serverIp -t serverIp:port protocol
+ExecStop=bash -c "ps aux | grep p2iClient | head -1 | awk {'print $2'} | xargs kill -9"
+ExecStop=/bin/kill $MAINPID
+StandardError=append:/var/log/p2iClient.log
+
+[Install]
+WantedBy=multi-user.target
